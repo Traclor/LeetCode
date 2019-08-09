@@ -1,0 +1,99 @@
+在?N?*?N?的网格上，我们放置一些?1 * 1 * 1??的立方体。
+
+每个值?v = grid[i][j]?表示?v?个正方体叠放在对应单元格?(i, j)?上。
+
+请你返回最终形体的表面积。
+
+?
+
+示例 1：
+
+输入：[[2]]
+输出：10
+示例 2：
+
+输入：[[1,2],[3,4]]
+输出：34
+示例 3：
+
+输入：[[1,0],[0,2]]
+输出：16
+示例 4：
+
+输入：[[1,1,1],[1,0,1],[1,1,1]]
+输出：32
+示例?5：
+
+输入：[[2,2,2],[2,1,2],[2,2,2]]
+输出：46
+?
+
+提示：
+
+1 <= N <= 50
+0 <= grid[i][j] <= 50
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/surface-area-of-3d-shapes
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+
+class Solution {
+    public int surfaceArea(int[][] grid) {
+        int area1 = 0;
+        int area2 = 0;
+        
+        for(int i = 0; i< grid.length; i++){
+            for(int j = 0; j< grid[i].length; j++){
+                if(grid[i][j] != 0)
+                    area1 += 2 + grid[i][j]*4;
+                if(j < grid[i].length - 1){
+                    if(i < grid.length -1){
+                        area2 += Math.min(grid[i][j+1],grid[i][j])*2;
+                        area2 += Math.min(grid[i+1][j],grid[i][j])*2;
+                    }
+                    else{
+                        if(j + 1 < grid[i].length)
+                            area2 += Math.min(grid[i][j+1],grid[i][j])*2;
+                    }
+                }
+                else{
+                    if(i + 1 < grid.length)
+                        area2 += Math.min(grid[i+1][j],grid[i][j])*2;
+                    }
+                }
+            }
+        return area1-area2;
+        }
+    }
+
+执行结果：通过
+显示详情
+执行用时 :6 ms, 在所有 Java 提交中击败了83.23%的用户
+内存消耗 :40.2 MB, 在所有 Java 提交中击败了74.07%的用户
+
+题解：
+class Solution {
+    public int surfaceArea(int[][] grid) {
+	int length = grid.length;
+	int surface1 = 0;    //记录每个位置上组合立方体的表面积
+	int surface2 = 0;    //记录每个位置上组合立方体的邻接面积
+	for (int i = 0; i < length; i++) {
+		for (int j = 0; j < length; j++) {
+			if (grid[i][j] != 0) {
+				surface1 += grid[i][j] * 4 + 2;    //记录当前位置上组合立方体的表面积
+			}
+			if (i != length - 1) {
+				surface2 += (grid[i][j] > grid[i + 1][j] ? grid[i + 1][j] : grid[i][j]) * 2;    //记录 i 行与 i + 1 行的邻接面积
+				surface2 += (grid[j][i] > grid[j][i + 1] ? grid[j][i + 1] : grid[j][i]) * 2;    //记录 i 列与 i + 1 列的邻接面积
+			}
+		}
+	}
+	return surface1 - surface2;
+    }
+}
+
+作者：VioletKiss
+链接：https://leetcode-cn.com/problems/two-sum/solution/java-ti-jie-892san-wei-xing-ti-de-biao-mian-ji-by-/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
