@@ -1,0 +1,51 @@
+1157. 子数组中占绝大多数的元素  显示英文描述  
+实现一个 MajorityChecker 的类，它应该具有下述几个 API：
+
+MajorityChecker(int[] arr) 会用给定的数组 arr 来构造一个 MajorityChecker 的实例。
+int query(int left, int right, int threshold) 有这么几个参数：
+0 <= left <= right < arr.length 表示数组 arr 的子数组的长度。
+2 * threshold > right - left + 1，也就是说阀值 threshold 始终比子序列长度的一半还要大。
+每次查询 query(...) 会返回在 arr[left], arr[left+1], ..., arr[right] 中至少出现阀值次数 threshold 的元素，如果不存在这样的元素，就返回 -1。
+
+
+class MajorityChecker {
+    static int[] array;
+
+    public MajorityChecker(int[] arr) {
+        array = arr;
+    }
+    
+    public static int query(int left, int right, int threshold) {
+        if(left < 0 || right < 0 || left > right || right > array.length){
+             return -1;
+        }
+        if(threshold > right - left + 1 ){
+            return -1;
+        }
+        Map<Integer, Integer> sort = new HashMap<Integer, Integer>();
+        int max = 0;
+        int num = 0;
+        for(int i = left; i < right +1 ;i++){
+            if(sort.containsKey(array[i])){
+                sort.put(array[i],sort.get(array[i]) + 1);
+            }
+            else{
+                sort.put(array[i],1);
+            }
+        }
+        
+       List<Map.Entry<Integer,Integer>> list = new ArrayList(sort.entrySet());
+       Collections.sort(list, (o1, o2) -> (o1.getValue() - o2.getValue()));
+       num = list.get(list.size() -1).getKey();
+        if(list.get(list.size() -1).getValue() < threshold ){
+            return -1;
+        }
+        return num;
+    }
+}
+
+/**
+ * Your MajorityChecker object will be instantiated and called as such:
+ * MajorityChecker obj = new MajorityChecker(arr);
+ * int param_1 = obj.query(left,right,threshold);
+ */
