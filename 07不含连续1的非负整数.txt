@@ -1,0 +1,51 @@
+给定一个正整数 n，找出小于或等于 n 的非负整数中，其二进制表示不包含?连续的1?的个数。
+
+示例 1:
+
+输入: 5
+输出: 5
+解释: 
+下面是带有相应二进制表示的非负整数<= 5：
+0 : 0
+1 : 1
+2 : 10
+3 : 11
+4 : 100
+5 : 101
+其中，只有整数3违反规则（有两个连续的1），其他5个满足规则。
+说明: 1 <= n <= 109
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/non-negative-integers-without-consecutive-ones
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+
+public class Solution {
+    public int findIntegers(int num) {
+        if(num==0) return 1;
+		String binary = Integer.toBinaryString(num);
+		int len=binary.length();
+		int[] f = new int[len+1];
+		f[0]=1;
+		f[1]=2;
+		for(int i=2; i<=len; i++) {
+			f[i] = f[i-1]+f[i-2];
+		}
+		int sum=0;
+		for(int i=0, k=len; i<len; i++,k--) {
+			if(binary.charAt(i)=='1') {
+				sum+=f[k-1];	
+				if(i>0 && binary.charAt(i-1)=='1') {
+					return sum;
+				}
+			}						
+		}
+		sum++;
+		
+		return sum;
+	}
+
+}
+
+执行用时 :4 ms, 在所有 Java 提交中击败了86.21%的用户
+内存消耗 :34.6 MB, 在所有 Java 提交中击败了90.24%的用户
